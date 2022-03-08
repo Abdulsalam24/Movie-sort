@@ -11,7 +11,7 @@ const App = () => {
     const [filtered , setFiltered] = useState([]);
     const [genre , setGenre] = useState(0)
     const [text , setText] = useState('')
-    const [search , setSearch] = useState([])
+    // const [search , setSearch] = useState([])
     
     const fetchMovie = async () => {
         const data = await fetch('https://api.themoviedb.org/3/movie/popular?api_key=6c288757e59a68ab616ba95e467779dc&language=en-US&page=1')
@@ -26,22 +26,21 @@ const App = () => {
         fetchMovie()
     },[])
 
-    
 
     const searchHandle = (e) => {
-        e.preventDefault()
-        setSearch(...search , text)
-    }
-
-    useEffect(() => {
-        if(search === ''){
+        setText(e)
+        if(e !== ''){
+            const filteredEl = popular.filter((item) => {
+                return Object.values(item.title)
+                .join('')
+                .toLowerCase()
+                .includes(e.toLowerCase())
+            })
+            setFiltered(filteredEl)
+        }else{
             setFiltered(popular)
-            return;
         }
-        const filteredSearch = popular.filter((item) => item.title === search)
-        setFiltered(filteredSearch)
-        setText('')
-    },[search])
+    }
 
 
   return (
@@ -56,10 +55,12 @@ const App = () => {
         genre={genre}
         setGenre={setGenre}
         />
-        <form onSubmit={searchHandle}>
-          <input type="text" placeholder='Search Movie ;)'
+        <form onSubmit={(e) => e.preventDefault()}>
+          <input 
+          type="text" 
+          placeholder='Search Movie ;)'
           value={text}
-          onChange={(e) => setText (e.target.value)}
+          onChange={(e) => searchHandle(e.target.value)}
           />
         </form>
         </div>
@@ -67,7 +68,7 @@ const App = () => {
 
 
         <div className='movie-div'>
-            {filtered.map((movie) =>{
+            {filtered.map((movie) => {
                 return <Movie key={movie.id} movie={movie}/>
             })}
         </div>

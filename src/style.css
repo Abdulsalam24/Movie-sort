@@ -22,7 +22,7 @@ body {
 }
 
 img {
-  height: 30vh;
+  height: 40vh;
   -o-object-fit: cover;
      object-fit: cover;
   width: 100%;
@@ -44,6 +44,12 @@ form {
   justify-content: flex-start;
   display: flex;
   align-items: center;
+  flex-direction: column;
+}
+@media (min-width: 500px) {
+  .form {
+    flex-direction: row;
+  }
 }
 .form form input {
   font-size: 0.8rem;
